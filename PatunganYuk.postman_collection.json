@@ -1,0 +1,1041 @@
+{
+  "info": {
+    "_postman_id": "patunganyuk-collection-2026-ade-dermawan",
+    "name": "PatunganYuk API",
+    "description": "REST API Collection untuk aplikasi PatunganYuk. Proyek Akhir UAS React & Java Spring Boot 2026. Dibuat oleh: Ade Dermawan",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. AUTH",
+      "item": [
+        {
+          "name": "Register User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test('Response sukses', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.status).to.eql('success');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\",\n  \"phoneNumber\": \"08123456789\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Registrasi user baru. Password di-hash dengan SHA-256."
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Login sukses', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.status).to.eql('success');",
+                  "    pm.expect(jsonData.data).to.have.property('email');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login user dengan email dan password."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. GROUPS - CRUD",
+      "item": [
+        {
+          "name": "Get All Groups",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Data array', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups"]
+            },
+            "description": "Get semua grup."
+          }
+        },
+        {
+          "name": "Get Groups by User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups?userName=Test User&userEmail=test@example.com",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups"],
+              "query": [
+                { "key": "userName", "value": "Test User" },
+                { "key": "userEmail", "value": "test@example.com" }
+              ]
+            },
+            "description": "Get grup milik user tertentu."
+          }
+        },
+        {
+          "name": "Get Groups - SEARCH",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups?search=liburan",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups"],
+              "query": [
+                { "key": "search", "value": "liburan" }
+              ]
+            },
+            "description": "Search grup by nama (case-insensitive)."
+          }
+        },
+        {
+          "name": "Get Groups - SORT ASC",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups?sortBy=name&direction=asc",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups"],
+              "query": [
+                { "key": "sortBy", "value": "name" },
+                { "key": "direction", "value": "asc" }
+              ]
+            },
+            "description": "Sort grup by nama ascending (A-Z)."
+          }
+        },
+        {
+          "name": "Get Groups - SORT DESC",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups?sortBy=name&direction=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups"],
+              "query": [
+                { "key": "sortBy", "value": "name" },
+                { "key": "direction", "value": "desc" }
+              ]
+            },
+            "description": "Sort grup by nama descending (Z-A)."
+          }
+        },
+        {
+          "name": "Get Group Detail by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}"]
+            },
+            "description": "Get detail grup by ID."
+          }
+        },
+        {
+          "name": "Create Group",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test('Simpan groupId', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('groupId', jsonData.data.id);",
+                  "        console.log('groupId saved:', jsonData.data.id);",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Liburan Bali 2026\",\n  \"category\": \"Perjalanan\",\n  \"description\": \"Trip ke Bali bersama teman\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/groups?creatorName=Test User&creatorEmail=test@example.com",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups"],
+              "query": [
+                { "key": "creatorName", "value": "Test User" },
+                { "key": "creatorEmail", "value": "test@example.com" }
+              ]
+            },
+            "description": "Buat grup baru. Creator otomatis jadi member pertama."
+          }
+        },
+        {
+          "name": "Update Group",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Liburan Bali 2026 UPDATED\",\n  \"category\": \"Perjalanan\",\n  \"description\": \"Trip updated\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}"]
+            },
+            "description": "Update grup by ID."
+          }
+        },
+        {
+          "name": "Delete Group",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}"]
+            },
+            "description": "Hapus grup by ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. MEMBERS - CRUD",
+      "item": [
+        {
+          "name": "Get Members by Group",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}/members",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}", "members"]
+            },
+            "description": "Get semua anggota grup."
+          }
+        },
+        {
+          "name": "Get Members - SORT",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}/members?sortBy=memberName&direction=asc",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}", "members"],
+              "query": [
+                { "key": "sortBy", "value": "memberName" },
+                { "key": "direction", "value": "asc" }
+              ]
+            },
+            "description": "Sort anggota by nama A-Z."
+          }
+        },
+        {
+          "name": "Add Member",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"memberName\": \"Budi Santoso\",\n  \"email\": \"budi@example.com\",\n  \"phoneNumber\": \"08111111111\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}/members",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}", "members"]
+            },
+            "description": "Tambah anggota ke grup."
+          }
+        },
+        {
+          "name": "Update Member",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"memberName\": \"Budi Santoso Updated\",\n  \"email\": \"budi@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}/members/{{memberId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}", "members", "{{memberId}}"]
+            },
+            "description": "Update anggota."
+          }
+        },
+        {
+          "name": "Delete Member",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}/members/{{memberId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}", "members", "{{memberId}}"]
+            },
+            "description": "Hapus anggota dari grup."
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. EXPENSES - CRUD",
+      "item": [
+        {
+          "name": "Get All Expenses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/expenses",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses"]
+            },
+            "description": "Get semua pengeluaran."
+          }
+        },
+        {
+          "name": "Get Non-Group Expenses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/expenses/non-group",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses", "non-group"]
+            },
+            "description": "Get pengeluaran pribadi (non-grup)."
+          }
+        },
+        {
+          "name": "Get Expenses by Group",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}/expenses",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}", "expenses"]
+            },
+            "description": "Get pengeluaran di grup tertentu."
+          }
+        },
+        {
+          "name": "Get Expenses - SORT DATE DESC",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}/expenses?sortBy=expenseDate&direction=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}", "expenses"],
+              "query": [
+                { "key": "sortBy", "value": "expenseDate" },
+                { "key": "direction", "value": "desc" }
+              ]
+            },
+            "description": "Sort pengeluaran by tanggal terbaru."
+          }
+        },
+        {
+          "name": "Get Expenses - SORT AMOUNT DESC",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}/expenses?sortBy=amount&direction=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}", "expenses"],
+              "query": [
+                { "key": "sortBy", "value": "amount" },
+                { "key": "direction", "value": "desc" }
+              ]
+            },
+            "description": "Sort pengeluaran by nominal tertinggi."
+          }
+        },
+        {
+          "name": "Create Group Expense",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test('Simpan expenseId', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('expenseId', jsonData.data.id);",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Makan Malam\",\n  \"amount\": 250000,\n  \"paidBy\": \"Test User\",\n  \"category\": \"Makanan\",\n  \"expenseDate\": \"2026-09-11\",\n  \"notes\": \"Dinner bareng tim\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}/expenses",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}", "expenses"]
+            },
+            "description": "Catat pengeluaran baru di grup."
+          }
+        },
+        {
+          "name": "Create Non-Group Expense",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Kopi Pagi\",\n  \"amount\": 25000,\n  \"paidBy\": \"Test User\",\n  \"category\": \"Makanan\",\n  \"expenseDate\": \"2026-09-11\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/expenses/non-group",
+              "host": ["{{baseUrl}}"],
+              "path": ["expenses", "non-group"]
+            },
+            "description": "Catat pengeluaran pribadi."
+          }
+        },
+        {
+          "name": "Update Expense",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Makan Malam UPDATED\",\n  \"amount\": 300000,\n  \"paidBy\": \"Test User\",\n  \"category\": \"Makanan\",\n  \"expenseDate\": \"2026-09-11\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}/expenses/{{expenseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}", "expenses", "{{expenseId}}"]
+            },
+            "description": "Update pengeluaran."
+          }
+        },
+        {
+          "name": "Delete Expense",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}/expenses/{{expenseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}", "expenses", "{{expenseId}}"]
+            },
+            "description": "Hapus pengeluaran."
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. SETTLEMENTS & BALANCES",
+      "item": [
+        {
+          "name": "Get Settlements by Group",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}/settlements",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}", "settlements"]
+            },
+            "description": "Get riwayat pelunasan."
+          }
+        },
+        {
+          "name": "Create Settlement",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fromMember\": \"Budi Santoso\",\n  \"toMember\": \"Test User\",\n  \"amount\": 150000,\n  \"paymentDate\": \"2026-09-11\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}/settle",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}", "settle"]
+            },
+            "description": "Catat pelunasan utang antar anggota."
+          }
+        },
+        {
+          "name": "Delete Settlement",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}/settlements/{{settlementId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}", "settlements", "{{settlementId}}"]
+            },
+            "description": "Hapus catatan pelunasan."
+          }
+        },
+        {
+          "name": "Get Group Balances",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Ada debtTransfers', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('debtTransfers');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/groups/{{groupId}}/balances",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "{{groupId}}", "balances"]
+            },
+            "description": "Hitung saldo & saran pelunasan (Who Owes Whom)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. CATEGORIES - CRUD",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"]
+            },
+            "description": "Get semua kategori."
+          }
+        },
+        {
+          "name": "Get Categories - SEARCH",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories?search=makan",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"],
+              "query": [
+                { "key": "search", "value": "makan" }
+              ]
+            },
+            "description": "Search kategori by nama."
+          }
+        },
+        {
+          "name": "Get Categories - SORT ASC",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories?sortBy=name&direction=asc",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"],
+              "query": [
+                { "key": "sortBy", "value": "name" },
+                { "key": "direction", "value": "asc" }
+              ]
+            },
+            "description": "Sort kategori A-Z."
+          }
+        },
+        {
+          "name": "Get Categories - SORT DESC",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories?sortBy=name&direction=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"],
+              "query": [
+                { "key": "sortBy", "value": "name" },
+                { "key": "direction", "value": "desc" }
+              ]
+            },
+            "description": "Sort kategori Z-A."
+          }
+        },
+        {
+          "name": "Get Category by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "{{categoryId}}"]
+            },
+            "description": "Get detail kategori."
+          }
+        },
+        {
+          "name": "Create Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test('Simpan categoryId', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('categoryId', jsonData.data.id);",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"TEST KATEGORI\",\n  \"description\": \"Kategori untuk testing\",\n  \"colorCode\": \"#FF5733\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"]
+            },
+            "description": "Buat kategori baru."
+          }
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"TEST KATEGORI UPDATED\",\n  \"colorCode\": \"#00FF00\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "{{categoryId}}"]
+            },
+            "description": "Update kategori."
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "{{categoryId}}"]
+            },
+            "description": "Hapus kategori."
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. USERS - CRUD",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
+            },
+            "description": "Get semua user (password di-strip)."
+          }
+        },
+        {
+          "name": "Get Users - SEARCH",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users?search=test",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"],
+              "query": [
+                { "key": "search", "value": "test" }
+              ]
+            },
+            "description": "Search user by nama."
+          }
+        },
+        {
+          "name": "Get Users - SORT ASC",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users?sortBy=name&direction=asc",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"],
+              "query": [
+                { "key": "sortBy", "value": "name" },
+                { "key": "direction", "value": "asc" }
+              ]
+            },
+            "description": "Sort user A-Z."
+          }
+        },
+        {
+          "name": "Get Users - SORT DESC",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users?sortBy=name&direction=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"],
+              "query": [
+                { "key": "sortBy", "value": "name" },
+                { "key": "direction", "value": "desc" }
+              ]
+            },
+            "description": "Sort user Z-A."
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}"]
+            },
+            "description": "Get detail user."
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User Updated\",\n  \"phoneNumber\": \"08999999999\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}"]
+            },
+            "description": "Update user."
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}"]
+            },
+            "description": "Hapus user."
+          }
+        },
+        {
+          "name": "Get User Financial Summary",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Ada youllGet & youllPay', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('youllGet');",
+                  "    pm.expect(jsonData.data).to.have.property('youllPay');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/summary?name=Test User&email=test@example.com",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "summary"],
+              "query": [
+                { "key": "name", "value": "Test User" },
+                { "key": "email", "value": "test@example.com" }
+              ]
+            },
+            "description": "Get ringkasan keuangan user."
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. REPORTS & ACTIVITIES",
+      "item": [
+        {
+          "name": "Get All Reports",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports"]
+            },
+            "description": "Get semua laporan kendala."
+          }
+        },
+        {
+          "name": "Create Report",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reporterEmail\": \"test@example.com\",\n  \"subject\": \"Bug di halaman grup\",\n  \"description\": \"Tombol hapus tidak berfungsi\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/reports",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports"]
+            },
+            "description": "Buat laporan kendala."
+          }
+        },
+        {
+          "name": "Toggle Report Status",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports/{{reportId}}/toggle",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "{{reportId}}", "toggle"]
+            },
+            "description": "Toggle status laporan (OPEN ↔ RESOLVED)."
+          }
+        },
+        {
+          "name": "Get All Activities",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/activities",
+              "host": ["{{baseUrl}}"],
+              "path": ["activities"]
+            },
+            "description": "Get semua log aktivitas."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api",
+      "type": "string"
+    },
+    {
+      "key": "groupId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "memberId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "expenseId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "categoryId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "settlementId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "reportId",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

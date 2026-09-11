@@ -1,0 +1,12 @@
+spring.application.name=patunganyuk-backend
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/patunganyuk_db
+spring.datasource.username=postgres
+spring.datasource.password=YOUR_PASSWORD
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+server.port=8080

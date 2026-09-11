@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+/* ==================== THERMAL RECEIPT THEME ==================== */
+@theme {
+  /* Warna kertas struk */
+  --color-receipt-paper: #fefcf7;
+  --color-receipt-paper-2: #faf7f0;
+  --color-receipt-ink: #1a1a1a;
+  --color-receipt-ink-light: #4a4a4a;
+  --color-receipt-ink-muted: #8a8a8a;
+  --color-receipt-line: #d4d0c8;
+  --color-receipt-red: #c41e3a;
+  --color-receipt-green: #2d5f3f;
+  --color-receipt-blue: #1e3a5f;
+  
+  /* Font monospace untuk struk */
+  --font-mono: 'Courier New', 'Courier', 'JetBrains Mono', monospace;
+  --font-receipt: 'Courier New', 'Courier', monospace;
+}
+
+/* ==================== BASE ==================== */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  background: #e8e6e1;
+  font-family: var(--font-mono);
+  color: var(--color-receipt-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Efek kertas struk dengan tekstur halus */
+.receipt-paper {
+  background-color: var(--color-receipt-paper);
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.008) 2px,
+      rgba(0, 0, 0, 0.008) 3px
+    );
+  position: relative;
+}
+
+/* Garis putus-putus horizontal ala struk */
+.receipt-divider {
+  border: none;
+  border-top: 1px dashed var(--color-receipt-line);
+  margin: 0;
+}
+
+.receipt-divider-double {
+  border: none;
+  border-top: 3px double var(--color-receipt-line);
+  margin: 0;
+}
+
+/* Efek zigzag di atas/bawah struk */
+.receipt-zigzag-top {
+  position: relative;
+}
+.receipt-zigzag-top::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background-image: 
+    linear-gradient(45deg, transparent 50%, var(--color-receipt-paper) 50%),
+    linear-gradient(-45deg, transparent 50%, var(--color-receipt-paper) 50%);
+  background-size: 12px 12px;
+  background-position: 0 0;
+  background-repeat: repeat-x;
+}
+
+.receipt-zigzag-bottom {
+  position: relative;
+}
+.receipt-zigzag-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background-image: 
+    linear-gradient(135deg, transparent 50%, var(--color-receipt-paper) 50%),
+    linear-gradient(-135deg, transparent 50%, var(--color-receipt-paper) 50%);
+  background-size: 12px 12px;
+  background-position: 0 0;
+  background-repeat: repeat-x;
+}
+
+/* Shadow kertas */
+.receipt-shadow {
+  box-shadow: 
+    0 1px 0 rgba(0, 0, 0, 0.05),
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 12px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* ==================== TYPOGRAPHY ==================== */
+.receipt-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.receipt-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-receipt-ink-muted);
+}
+
+.receipt-value {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--color-receipt-ink);
+}
+
+/* ==================== ANIMASI ==================== */
+@keyframes receipt-print {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.receipt-print {
+  animation: receipt-print 0.4s ease-out;
+}
+
+/* Blinking cursor ala struk */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.receipt-cursor::after {
+  content: '█';
+  animation: blink 1s infinite;
+  color: var(--color-receipt-ink);
+  margin-left: 2px;
+}
+
+/* Scrollbar ala struk */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-receipt-paper-2);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-receipt-line);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-receipt-ink-muted);
+}
