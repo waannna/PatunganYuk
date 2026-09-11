@@ -240,7 +240,7 @@ public class SplitwiseController {
         return ResponseEntity.ok(response);
     }
 
-\    // 4. SETTLEMENTS & BALANCES ENDPOINTS
+    // 4. SETTLEMENTS & BALANCES ENDPOINTS
 
     @GetMapping("/groups/{groupId}/settlements")
     public ResponseEntity<Map<String, Object>> getSettlementsByGroupId(
